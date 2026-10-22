@@ -1,0 +1,676 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Oswald", "Arial Narrow", system-ui, sans-serif;
+  --font-sans: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+
+  --color-bg: #070a09;
+  --color-surface: #101614;
+  --color-surface-2: #18211d;
+  --color-fg: #e8efe9;
+  --color-muted: #8a9a90;
+  --color-primary: #2ee6c5;
+  --color-primary-fg: #06211c;
+  --color-ember: #e85d3a;
+  --color-bone: #d4c4a8;
+  --color-steel: #9aa39e;
+  --color-border: #2a3832;
+  --color-wood: #24140f;
+  --color-wood-2: #3a2218;
+  --color-fretwire: #c5c0b4;
+  --color-nut: #e6dcc8;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Guitar stays teal. Violin is amber, so the two games don't look the same. */
+.guise-violin {
+  --color-primary: #f0a202;
+  --color-primary-fg: #1a1204;
+  --color-border: #4a3a1c;
+  --color-surface: #16120c;
+  --color-surface-2: #241c10;
+  --color-bg: #0c0a07;
+  --color-muted: #b3a48a;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .scene-scrim {
+    background: rgb(7 10 9 / 0.62);
+  }
+
+  .scene-scrim-soft {
+    background: linear-gradient(
+      180deg,
+      rgb(7 10 9 / 0.12) 0%,
+      rgb(7 10 9 / 0.18) 48%,
+      rgb(7 10 9 / 0.72) 100%
+    );
+  }
+
+  .crop-orbs {
+    object-fit: cover;
+    object-position: center 58%;
+  }
+
+  .collage-wall {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0.7rem;
+    height: 100%;
+    padding: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .collage-wall {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1rem;
+      padding: 1.25rem;
+    }
+  }
+
+  .collage-piece {
+    display: flex;
+    min-height: 0;
+    margin: 0;
+    background: #efe7d6;
+    padding: 0.4rem 0.4rem 1.3rem;
+    box-shadow: 0 14px 28px rgb(0 0 0 / 0.45);
+    transform: rotate(var(--tilt, 0deg));
+  }
+
+  .collage-piece img {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    flex: 1;
+    object-fit: cover;
+  }
+
+  .fret-cell {
+    height: 3.4rem;
+    touch-action: none;
+  }
+
+  .violin-board {
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.35), transparent 18%, transparent 82%, rgb(0 0 0 / 0.4)),
+      linear-gradient(90deg, #1a120c 0%, #2a1c12 45%, #140e0a 100%);
+  }
+
+  .violin-place {
+    height: 3.4rem;
+    touch-action: none;
+  }
+
+  .violin-place.is-tape {
+    box-shadow: inset 0 -2px 0 rgb(212 196 168 / 0.35);
+  }
+
+  .violin-place.is-target {
+    background: rgb(232 93 58 / 0.28);
+  }
+
+  .finger-dot.is-held {
+    width: 1.25rem;
+    height: 1.25rem;
+    background: radial-gradient(circle at 35% 30%, #fff, #d4c4a8 42%, #6a4330);
+    box-shadow:
+      0 0 0 2px rgb(232 93 58 / 0.9),
+      0 2px 6px rgb(0 0 0 / 0.45);
+  }
+
+  .bow-bar {
+    display: flex;
+    width: 3.25rem;
+    flex-direction: column;
+    touch-action: none;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #f3ead8, #8d6232 55%, #3a2414);
+    padding: 1.35rem 0.35rem 0.45rem;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  }
+
+  .bow-label {
+    margin-top: -1.15rem;
+    margin-bottom: 0.2rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #1c1612;
+  }
+
+  .bow-lane {
+    flex: 1;
+    border-radius: 999px;
+  }
+
+  .bow-lane.is-live {
+    background: rgb(46 230 197 / 0.45);
+  }
+
+  /* Guitar: press-hold-slide fretting + strum bar (ported from the violin bow bar). */
+  .guitar-string-row {
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .string-wire.is-fretted {
+    opacity: 1;
+    box-shadow: 0 0 10px rgb(232 93 58 / 0.55);
+  }
+
+  .held-marker {
+    pointer-events: none;
+    position: absolute;
+    top: 0.05rem;
+    left: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
+  }
+
+  .held-marker-dot {
+    display: grid;
+    place-items: center;
+    width: 1.55rem;
+    height: 1.55rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #1c1612;
+    background: radial-gradient(circle at 35% 30%, #fff, #d4c4a8 42%, #8a5a3a);
+    box-shadow:
+      0 0 0 2px rgb(232 93 58 / 0.95),
+      0 0 14px rgb(232 93 58 / 0.6),
+      0 2px 6px rgb(0 0 0 / 0.5);
+  }
+
+  .held-marker-pos {
+    margin-top: 0.1rem;
+    border-radius: 4px;
+    background: rgb(0 0 0 / 0.6);
+    padding: 0 0.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    line-height: 1.2;
+    color: var(--color-bone);
+  }
+
+  .strum-bar {
+    position: relative;
+    display: flex;
+    width: 3.6rem;
+    flex-shrink: 0;
+    flex-direction: column;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    border-radius: 1rem;
+    border: 1px solid rgb(212 196 168 / 0.4);
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 0.35), transparent 30%, transparent 70%, rgb(0 0 0 / 0.35)),
+      linear-gradient(180deg, #2a1c12, #4a2e1c 50%, #1a100a);
+    padding: 1.5rem 0.3rem 1.4rem;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.08),
+      0 12px 30px rgb(0 0 0 / 0.45);
+    transition: box-shadow 120ms ease-out;
+  }
+
+  .strum-bar.is-strum-down,
+  .strum-bar.is-strum-up {
+    box-shadow:
+      inset 0 0 0 2px rgb(46 230 197 / 0.75),
+      0 0 22px rgb(46 230 197 / 0.45);
+  }
+
+  .strum-label {
+    position: absolute;
+    top: 0.35rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-bone);
+  }
+
+  .strum-hint {
+    position: absolute;
+    bottom: 0.3rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--color-primary);
+  }
+
+  .strum-lane {
+    position: relative;
+    flex: 1;
+    min-height: 1.4rem;
+  }
+
+  .strum-lane-wire {
+    position: absolute;
+    left: 0.15rem;
+    right: 0.15rem;
+    top: 50%;
+    height: 2px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #9aa39e, #f2f0ea, #9aa39e);
+    opacity: 0.55;
+  }
+
+  .strum-lane.is-held .strum-lane-wire {
+    height: 3px;
+    opacity: 1;
+    background: var(--color-ember);
+    box-shadow: 0 0 8px rgb(232 93 58 / 0.7);
+  }
+
+  .is-strum-down .strum-lane-wire,
+  .is-strum-up .strum-lane-wire {
+    opacity: 1;
+    box-shadow: 0 0 10px rgb(46 230 197 / 0.85);
+  }
+
+  .studio-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    gap: 0.75rem;
+    margin-inline: auto;
+    max-width: 90rem;
+    padding: 0.75rem;
+  }
+
+  .studio-rail {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .rotate-hint {
+    display: none;
+  }
+
+  .rail-toggle {
+    display: none;
+  }
+
+  .fretboard-wood {
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 0.45), transparent 7%, transparent 93%, rgb(0 0 0 / 0.5)),
+      repeating-linear-gradient(
+        90deg,
+        rgb(42 22 16 / 0.15) 0 2px,
+        transparent 2px 7px
+      ),
+      linear-gradient(180deg, #3a2218 0%, #1a0c08 48%, #2a1610 100%);
+  }
+
+  .string-wire {
+    pointer-events: none;
+    position: absolute;
+    left: 2.8rem;
+    right: 0;
+    top: 0.7rem;
+    z-index: 1;
+    height: var(--gauge);
+    background: linear-gradient(
+      180deg,
+      #f2f0ea 0%,
+      #9aa39e 40%,
+      #6d736e 100%
+    );
+    box-shadow: 0 0 6px rgb(46 230 197 / 0.18);
+    border-radius: 99px;
+    opacity: 0.85;
+  }
+
+  .string-wire.is-ringing {
+    animation: string-ring 0.7s var(--ease-out);
+  }
+
+  .note-digit {
+    position: absolute;
+    left: 50%;
+    top: 62%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    color: var(--color-primary);
+    text-shadow: 0 0 10px rgb(46 230 197 / 0.7);
+  }
+
+  .note-digit.is-root {
+    color: var(--color-ember);
+    text-shadow: 0 0 10px rgb(232 93 58 / 0.8);
+  }
+
+  .note-digit.is-played {
+    color: var(--color-bone);
+    text-shadow: 0 0 12px rgb(232 239 233 / 0.9);
+  }
+
+  .note-digit.is-mute {
+    color: var(--color-ember);
+    text-shadow: none;
+  }
+
+  .finger-dot {
+    position: absolute;
+    top: 0.45rem;
+    left: 50%;
+    z-index: 3;
+    width: 1.05rem;
+    height: 1.05rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--color-primary-fg);
+    background: var(--color-primary);
+    box-shadow: 0 0 8px rgb(46 230 197 / 0.55);
+  }
+
+  .finger-dot.is-root {
+    background: var(--color-ember);
+    color: var(--color-fg);
+    box-shadow: 0 0 8px rgb(232 93 58 / 0.55);
+  }
+
+  .polaroid {
+    background: #efe7d6;
+    color: #1c1612;
+    padding: 0.45rem 0.45rem 1.4rem;
+    box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
+  }
+
+  .rain {
+    background-image: linear-gradient(
+      165deg,
+      transparent 0%,
+      transparent 40%,
+      rgb(232 239 233 / 0.09) 50%,
+      transparent 60%,
+      transparent 100%
+    );
+    background-size: 8px 42px;
+    animation: rain-fall 0.7s linear infinite;
+    opacity: 0.35;
+    mix-blend-mode: screen;
+  }
+}
+
+@keyframes string-ring {
+  0% {
+    transform: scaleY(1.8);
+    filter: brightness(1.5);
+  }
+  100% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes orb-hit {
+  0% {
+    transform: scale(0.86);
+    filter: blur(2px);
+  }
+  60% {
+    transform: scale(1.12);
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rain-fall {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 12px 42px;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.enter-1,
+.enter-2,
+.enter-3,
+.enter-4 {
+  animation: fade-up 400ms var(--ease-smooth-out) both;
+}
+.enter-2 {
+  animation-delay: 80ms;
+}
+.enter-3 {
+  animation-delay: 140ms;
+}
+.enter-4 {
+  animation-delay: 200ms;
+}
+
+@media (min-width: 1024px) {
+  .studio-rail {
+    grid-template-columns: minmax(0, 1fr) 16.5rem;
+  }
+}
+
+@media (orientation: landscape) {
+  .collage-wall {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .start-copy {
+    max-width: 34rem;
+    justify-content: center;
+  }
+
+  .studio-shell {
+    display: grid;
+    height: 100dvh;
+    max-height: 100dvh;
+    max-width: none;
+    overflow: hidden;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 17.5rem);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0.5rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .studio-top {
+    grid-column: 1 / -1;
+  }
+
+  .studio-neck {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .studio-rail {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 0.45rem;
+    overflow: auto;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .studio-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .studio-neck {
+    grid-column: 1;
+  }
+
+  .studio-rail {
+    display: none;
+  }
+
+  .studio-shell.rail-open {
+    grid-template-columns: minmax(0, 1fr) 16rem;
+  }
+
+  .studio-shell.rail-open .studio-neck {
+    grid-column: 1;
+  }
+
+  .studio-shell.rail-open .studio-rail {
+    display: grid;
+    grid-column: 2;
+  }
+
+  .rail-toggle {
+    display: inline-flex;
+  }
+
+  .studio-kicker {
+    display: none;
+  }
+
+  .fret-legend {
+    display: none;
+  }
+
+  .fret-cell {
+    height: 2.35rem;
+  }
+
+  .violin-place {
+    height: 2.5rem;
+  }
+
+  .held-marker-dot {
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: 0.55rem;
+  }
+
+  .held-marker-pos {
+    display: none;
+  }
+
+  .strum-bar {
+    width: 3.1rem;
+    padding: 1.2rem 0.25rem 1.1rem;
+  }
+
+  .note-digit {
+    font-size: 0.95rem;
+  }
+
+  .string-wire {
+    top: 0.55rem;
+  }
+
+  .finger-dot {
+    top: 0.28rem;
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 820px) {
+  .rotate-hint {
+    display: block;
+    position: relative;
+    z-index: 20;
+    margin: 0.6rem 0.75rem 0;
+    border: 1px solid var(--color-border);
+    background: rgb(16 22 20 / 0.86);
+    color: var(--color-bone);
+    padding: 0.55rem 0.75rem;
+    font-size: 0.92rem;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rain,
+  .string-wire.is-ringing,
+  .enter-1,
+  .enter-2,
+  .enter-3,
+  .enter-4 {
+    animation: none;
+  }
+}

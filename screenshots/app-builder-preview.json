@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Steeley Strings",
+      "hasCanvas": false,
+      "bodyTextLen": 154,
+      "bodyTextHash": "1b4b1c3bb5d5a909daf3ba70ebf71b416d8d8cddfe00be50707c1b3009b23c5f",
+      "bodyTextPrefix": "STEEL-STRING STUDIO · PLAY IT SIDEWAYS STEELEY STRINGS Lay the p",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Steeley Strings",
+      "hasCanvas": false,
+      "bodyTextLen": 212,
+      "bodyTextHash": "dfc3b6a2c1cc11c5d18a5c9cacd559955025baf70acf8c8f2d9a9188a6fbac44",
+      "bodyTextPrefix": "Turn the phone on its side — the neck sits left to right. STEEL-",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
